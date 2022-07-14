@@ -43,7 +43,6 @@ class Grid:
                 else:
                     row.append(NOTHING)
             self.board.append(row)
-        #self.moves = self.valid_moves() + self.valid_takes()
         self.turn = lambda x: x > 0
         self.player_positions = self.get_current_positions()
 
@@ -56,11 +55,34 @@ class Grid:
         
         return positions
 
+    def valid_takes(self, pos):
+        pass
+        
+
 
     def valid_moves(self, pos):
         """Valid moves that don't include taking"""
-        moves = [(1, 1), (-1, -1), (-1, 1), (1, -1)]
+        if self.board[pos[0]][pos[1]] in [RED_KING, BLACK_KING]:
+            moves = [(1, 1), (-1, -1), (-1, 1), (1, -1)]
         
+        elif self.board[pos[0]][pos[1]] == RED:
+            moves = [(-1 -1), (-1, 1)]
+        elif self.board[pos[0]][pos[1]] == BLACK:
+            moves = [(1, 1), (1, -1)]
+
+        valid_positions = []
+
+
+        for move in moves:
+            if move[0] + pos[0] < 0 or move[0] + pos[0] >= self.width or move[1] + pos[1] < 0 or move[1] + pos[1] >= self.width:
+                moves.remove(move)
+                continue
+            if self.board[pos[0] + move[0]][pos[1] + move[1]] != NOTHING:
+                moves.remove(move)
+            valid_positions.append((pos[0] + move[0], pos[1] + move[1]))
+
+        return valid_positions
+    
     
 
 grid = Grid()
